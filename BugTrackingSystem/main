@@ -1,0 +1,107 @@
+package com.yash.bugtrackingsystem.main;
+
+import java.util.regex.Pattern;
+
+import javax.swing.JOptionPane;
+
+import com.yash.bugtrackingsystem.exceptions.InvalidApplicationNameException;
+import com.yash.bugtrackingsystem.model.Application;
+import com.yash.bugtrackingsystem.service.ApplicationService;
+
+public class StartupApplication {
+
+	public static void main(String[] args){
+		ApplicationService appService = new ApplicationService();
+		
+		while(true){
+		System.out.println("******* Bug Tracking System *********");
+		System.out.println("     Main Menu     ");
+		System.out.println("1. Create Application");
+		System.out.println("2. Delete Application");
+		System.out.println("3. Update Application");
+		System.out.println("4. Find Application by ID");
+		System.out.println("5. Find Application by free text search");
+		System.out.println("6. List all Applications");
+		System.out.println("7. List all Applications by Date");
+		System.out.println("0. exit");
+		
+		
+		String choice = JOptionPane.showInputDialog("Enter Your Choice");
+		boolean check = false;
+		if(check != Pattern.matches("[\\D]*", choice)) {
+			try {
+				throw new InvalidApplicationNameException("Invalid Choice, Please Try Again");
+			} catch (InvalidApplicationNameException ex) {
+				JOptionPane.showMessageDialog(null, ex.getMessage());	
+			}
+		}
+		else {
+		switch(Integer.parseInt(choice)) {
+		
+		case 0:{
+			System.exit(0);
+		}
+		break;
+		
+		case 1:{
+			String name = JOptionPane.showInputDialog("Application Name");
+			try {
+			Application application = new Application(name);
+			appService.addApplication(application);
+			JOptionPane.showMessageDialog(null, "Application Added Successfully and Id is "+application.getAppId());
+			}
+			catch(InvalidApplicationNameException ex){
+				JOptionPane.showMessageDialog(null, ex.getMessage());
+			}
+			
+		}
+		break;
+		
+		case 2:{
+			int id = Integer.parseInt(JOptionPane.showInputDialog("App Id"));
+			appService.deleteApplication(id);
+			JOptionPane.showMessageDialog(null, "Application Deleted Successfully");
+		}
+		break;
+		
+		case 3:{
+			int id = Integer.parseInt(JOptionPane.showInputDialog("App Id"));
+			String name = JOptionPane.showInputDialog("Application New Name");
+			appService.updateApplication(id, name);
+			JOptionPane.showMessageDialog(null, "Application Updated Successfully");
+		}
+		break;
+		
+		case 4:{
+			int id = Integer.parseInt(JOptionPane.showInputDialog("App Id"));
+			Application temp = appService.findApplicationById(id);
+			System.out.println(temp.toString());
+			JOptionPane.showMessageDialog(null, "Application Found Successfully");
+		}
+		break;
+		
+		case 5:{
+			String freeText = JOptionPane.showInputDialog("Enter Free Text ");
+			Application[] temp = appService.findApplicationByFreeText(freeText);
+			for(int i=0;i<temp.length;i++)
+			System.out.println(temp[i].toString());
+		}
+		break;
+		
+		case 6:{
+			appService.listApplications();
+		}
+		break;
+		
+		case 7:{
+			appService.listApplicationsByDate();
+		}
+		break;
+		
+		default:
+			JOptionPane.showMessageDialog(null, "Invalid Choice, Please Try Again");
+		}
+	}
+	}
+	}
+}
