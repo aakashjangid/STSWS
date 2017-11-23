@@ -1,0 +1,14 @@
+package com.yash.bugtrackingsystem.service;
+
+import com.yash.bugtrackingsystem.exceptions.InvalidApplicationNameException;
+import com.yash.bugtrackingsystem.model.Application;
+
+public interface Controller {
+	void addApplication(Application application) throws InvalidApplicationNameException;
+	void listApplications();
+	void deleteApplication(int id);
+	void updateApplication(int id, String name);
+	Application findApplicationById(int id);
+	void listApplicationsByDate();
+	Application[] findApplicationByFreeText(String freeText);
+}
