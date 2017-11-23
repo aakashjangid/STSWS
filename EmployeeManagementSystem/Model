@@ -1,0 +1,66 @@
+package com.yash.arrayapp.model;
+
+/**
+ * 
+ * This will hold the details of the employee
+ * @author aakash.jangid
+ *
+ */
+public class Employee {
+		
+	/**
+	 * Id of the Employee
+	 */
+	private int id;
+	
+	/**
+	 * Name of the Employee
+	 */
+	private String name;
+	
+	/**
+	 * Salary of the Employee
+	 */
+	private int salary;
+	
+	public Employee() {
+		
+	}
+	
+	public Employee(int id, String name, int salary) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.salary = salary;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		if(id+id==2*id) {
+		this.id = id;
+	}
+		else {
+			this.id = 0;
+			System.out.println("invalid ID");
+		}
+		}
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getSalary() {
+		return salary;
+	}
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+	
+@Override
+public String toString() {
+	return "Id : "+this.id+" Name : "+this.name+" Salary : "+this.salary;
+}
+}
