@@ -1,0 +1,101 @@
+package com.yash.arrayapp.employeeservice;
+
+import com.yash.arrayapp.model.Employee;
+
+/**
+ * This will create the object of the employee and provide repository to employee and services
+ * If the repository will be out of capacity then it will just double the capacity of the repository.
+ */
+
+public class EmployeeService {
+	
+	private Employee [] employeeRepository = new Employee[10];
+	private int location = 0;
+	
+/**
+ * This will store employee details in repository 
+ * @param employee
+ */
+public void setEmployee(Employee employee) {
+	
+	if(location>=employeeRepository.length) {
+		Employee []temp=new Employee[employeeRepository.length]; 
+		temp=expandRepository(employeeRepository,employeeRepository.length);
+		employeeRepository = new Employee[temp.length];
+		
+		for(int i=0;i<temp.length;i++) {
+			employeeRepository[i]=temp[i];
+		}	
+	}		
+	employeeRepository[location++]=employee;
+}
+
+/**
+ * This will be the create a new expanded repository and also copies the previous repository
+ * @param employeeRepository2
+ * @param length
+ * @return
+ */
+private Employee[] expandRepository(Employee[] employeeRepository2, int length) {
+	Employee []temprepository = new Employee[length*2];
+	
+	for(int i=0;i<employeeRepository2.length;i++) {
+		temprepository[i]=employeeRepository2[i];
+	}	
+	return temprepository;
+}
+
+/**
+ * This will return list of employees
+ * @return
+ */
+public Employee[] ListEmployee() {
+	Employee[] tempRepository = new Employee[location];
+	for (int i=0;i<location;i++) {
+		tempRepository[i] = employeeRepository[i];
+	}
+	return tempRepository;
+}
+
+/**
+ * This will remove the Employee using unique ID
+ * @param id
+ */
+public void removeEmployee(int id) {
+	int i=0;
+	while(i<location){
+		if(employeeRepository[i].getId()==id){
+			employeeRepository[i]=null;
+			for(int j=i;j<location;j++) {
+				employeeRepository[j]=employeeRepository[j+1];
+			}
+			location--;
+		}
+		i++;
+	}
+}
+
+public void updateEmployee(int id, String name, int salary) {
+	int i=0;
+	while(i<location) {
+		if(employeeRepository[i].getId()==id) {
+			employeeRepository[i].setName(name);
+			employeeRepository[i].setSalary(salary);
+		}
+		i++;
+	}
+}
+
+public void sortEmployeeById() {
+	Employee temp;
+	for(int i=0;i<location-1;i++) {
+		for(int j=i;j<location-1;j++) {
+			if(employeeRepository[i].getId()>employeeRepository[j].getId()) {
+				temp=employeeRepository[i];
+				employeeRepository[i]=employeeRepository[j];
+				employeeRepository[j]=temp;
+			}
+		}
+	}
+}
+}
