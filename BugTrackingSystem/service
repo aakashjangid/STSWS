@@ -1,0 +1,94 @@
+package com.yash.bugtrackingsystem.service;
+
+import com.yash.bugtrackingsystem.exceptions.InvalidApplicationNameException;
+import com.yash.bugtrackingsystem.model.Application;
+
+public class ApplicationService implements Controller{
+	
+	Application[] appRepository = new Application[15];
+	private int location = 0;
+	private int appId=101;
+	private int valid=0;
+	
+	public void addApplication(Application application) throws InvalidApplicationNameException{
+		for(int i=0;i<appRepository.length;i++) {
+			if(appRepository[i]!=null) {
+				if(appRepository[i].getAppName().equals(application.getAppName())) {
+					valid = 1;
+					throw new InvalidApplicationNameException("Application Name Already Exists");	
+					}
+				}
+			}
+		if(valid==0) {	
+		application.setAppId(appId);
+		appRepository[location++]=application;
+		appId++;	
+		}
+	}
+
+	public void listApplications() {
+		Application[] tempRepository = new Application[location];
+		for(int i=0;i<location;i++)
+			tempRepository[i]=appRepository[i];
+		for(int i=0;i<location;i++)
+			System.out.println(tempRepository[i].toString());
+	}
+	
+	public void deleteApplication(int id) {
+		for(int i=0;i<location;i++) {
+			if(appRepository[i].getAppId()==id) {
+				appRepository[i]=null;
+			for(int j=i;j<location;j++)
+				appRepository[j]=appRepository[j+1];
+			location--;
+		}
+	}
+	}
+	
+	public void updateApplication(int id, String name) {
+		for(int i=0;i<location;i++) {
+			if(appRepository[i].getAppId()==id)
+				appRepository[i].setAppName(name);
+			}
+		}
+	
+	public Application findApplicationById(int id) {
+		Application temp = null;
+		for(int i=0;i<location;i++) {
+			if(appRepository[i].getAppId()==id)
+				temp=appRepository[i];
+			}
+		return temp;
+	}
+
+	public void listApplicationsByDate() {
+		int temp=1;
+		Application tempe;
+	for(int i=0;i<location;i++) {
+		for(int j=i+1;j<location;j++) {
+	if(temp == appRepository[i].getDate().compareTo(appRepository[j].getDate())) {
+		tempe=appRepository[i];
+		appRepository[i]=appRepository[j];
+		appRepository[j]=tempe;
+	}
+	}
+		System.out.println(appRepository[i].toString()+" ");
+	}
+}
+	
+	public Application[] findApplicationByFreeText(String freeText) {
+		int j=0;
+		Application[] temp = new Application[location];
+		for(int i=0;i<location;i++) {
+			if(appRepository[i].getAppName().toLowerCase().contains(freeText.toLowerCase())) {
+			temp[j]=appRepository[i];
+				j++;
+			}
+		}
+		Application[] searchResult = new Application[j];
+		for(int i=0;i<j;i++) {
+			searchResult[i]=temp[i];
+		}
+		return searchResult;
+	}
+}
