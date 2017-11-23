@@ -1,0 +1,49 @@
+package com.yash.bugtrackingsystem.model;
+
+import java.util.Date;
+
+import com.yash.bugtrackingsystem.exceptions.InvalidApplicationNameException;
+
+public class Application {
+	int appId;
+	String appName;
+	Date date = new Date();
+	
+	public Application(String name) throws InvalidApplicationNameException{
+		int temp=0;
+		for(char c : name.toCharArray()){
+	        if(Character.isDigit(c)){
+	            temp++;
+	        }}
+	    if(temp!=0)
+	        throw new InvalidApplicationNameException("Invalid Application Name");
+	    else 
+		this.appName=name;
+	}
+	
+	public int getAppId() {
+		return appId;
+	}
+	public void setAppId(int appId) {
+		this.appId = appId;
+	}
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public String toString() {
+		return "App Id - "+this.getAppId()+" App Name - "+this.getAppName()+" Date of creation - "+this.date;
+	}
+		
+}
