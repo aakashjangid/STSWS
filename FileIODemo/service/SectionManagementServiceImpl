@@ -1,0 +1,23 @@
+package com.yash.fileiodemo.service;
+
+import java.util.ArrayList;
+import com.yash.fileiodemo.controller.SectionManagementService;
+import com.yash.fileiodemo.model.Section;
+
+public class SectionManagementServiceImpl implements SectionManagementService{
+	
+	ArrayList<Section> sectionRepository = new ArrayList<>();
+	
+	@Override
+	public void createSection(Section section) {
+		sectionRepository.add(section);
+	}
+
+	@Override
+	public void showSection() {
+		for (Section section : sectionRepository) {
+			System.out.println(section);
+		}
+	}
+
+}
