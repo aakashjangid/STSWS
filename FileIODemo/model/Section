@@ -1,0 +1,41 @@
+package com.yash.fileiodemo.model;
+
+public class Section {
+	private int sectionNumber;
+	private String sectionId;
+	private String sectionName;
+	
+	public Section() {
+		
+	}
+	
+	public Section(int sectionNumber, String sectionId2, String sectionName) {
+		this.sectionNumber=sectionNumber;
+		this.sectionId=sectionId2;
+		this.sectionName=sectionName;
+	}
+
+	public int getSectionNumber() {
+		return sectionNumber;
+	}
+	public void setSectionNumber(int sectionNumber) {
+		this.sectionNumber = sectionNumber;
+	}
+	public String getSectionId() {
+		return sectionId;
+	}
+	public void setSectionId(String sectionId) {
+		this.sectionId = sectionId;
+	}
+	public String getSectionName() {
+		return sectionName;
+	}
+	public void setSectionName(String sectionName) {
+		this.sectionName = sectionName;
+	}
+	
+	@Override
+	public String toString() {
+		return "Section No - "+this.getSectionNumber()+" Section Id - "+this.getSectionId()+" Section Name - "+this.getSectionName();
+	}
+}
