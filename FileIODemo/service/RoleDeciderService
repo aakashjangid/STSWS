@@ -1,0 +1,37 @@
+package com.yash.fileiodemo.service;
+import com.yash.fileiodemo.model.RoleDecider;
+
+public class RoleDeciderService {
+	
+	String role;
+	String[] traineeName = new String[] {"Aakash","Ishan"};
+	String[] traineePassword = new String[] {"Aakash","Ishan"};
+	String[] trainerName = new String[] {"Pankaj"};
+	String[] trainerPassword = new String[] {"Pankaj"};
+	
+	public String check(RoleDecider decider) {
+		boolean valid=false;
+		for (int i = 0; i < traineeName.length; i++) {
+			if(traineeName[i].equals(decider.getUserName())) {
+				if(traineePassword[i].equals(decider.getPassWord())) {
+				valid=true;
+				role="Trainee";
+				}
+			}
+			for (int j = 0; j < trainerName.length; j++) {
+				if(trainerName[j].equals(decider.getUserName())) {
+					if(trainerPassword[i].equals(decider.getPassWord())) {
+					valid=true;
+					role= "Trainer";
+					}
+				}
+		}
+		if(valid==true) {
+			return role;
+		}
+		else
+			System.out.println("User Not Found");
+	}
+		return role;
+}
+}
