@@ -1,0 +1,29 @@
+package com.yash.fileiodemo.util;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+
+import com.yash.fileiodemo.model.RoleDecider;
+import com.yash.fileiodemo.service.RoleDeciderService;
+
+public class RoleDeciderMenu {
+	
+	public static String roleVerifier() {
+	
+	String userName = JOptionPane.showInputDialog("Enter User Name");
+	String password = null;
+	JPasswordField passwordField = new JPasswordField( );
+	passwordField.setEchoChar( '*' );
+	int okCxl = JOptionPane.showConfirmDialog(null, passwordField, "Enter Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.OK_CANCEL_OPTION);
+
+	if (okCxl == JOptionPane.OK_OPTION) 
+	password = new String(passwordField.getPassword());
+	
+	RoleDecider decider = new RoleDecider(userName, password);
+	RoleDeciderService deciderService = new RoleDeciderService();
+	String role = deciderService.check(decider);
+	
+	System.out.println(role);
+	return role;
+}
+}
