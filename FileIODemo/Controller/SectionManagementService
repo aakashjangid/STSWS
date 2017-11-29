@@ -1,0 +1,8 @@
+package com.yash.fileiodemo.controller;
+
+import com.yash.fileiodemo.model.Section;
+
+public interface SectionManagementService {
+	public void createSection(Section section);
+	public void showSection();
+}
