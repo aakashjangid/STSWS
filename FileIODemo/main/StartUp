@@ -1,0 +1,48 @@
+package com.yash.fileiodemo.main;
+
+import java.io.IOException;
+
+import javax.swing.JOptionPane;
+import com.yash.fileiodemo.model.Section;
+import com.yash.fileiodemo.service.SectionManagementServiceImpl;
+import com.yash.fileiodemo.util.ApplicationMenu;
+import com.yash.fileiodemo.util.RoleDeciderMenu;
+import com.yash.fileiodemo.util.TrainerAllMenu;
+
+public class StartupApplication {
+
+	public static void main(String[] args) {
+		
+		SectionManagementServiceImpl sectionService = new SectionManagementServiceImpl();
+		
+		String role = RoleDeciderMenu.roleVerifier();
+		
+		try {
+			TrainerAllMenu.trainerAllMenu();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		/*do{ApplicationMenu.mainMenu();
+		int choice=Integer.parseInt(JOptionPane.showInputDialog("Enter Your Choice"));
+		switch (choice) {
+		
+		case 0: System.exit(0);
+			break;
+			
+		case 1:
+			int sectionNumber = Integer.parseInt(JOptionPane.showInputDialog("Enter Section Number"));
+			String sectionId = JOptionPane.showInputDialog("Enter Section ID");
+			String sectionName = JOptionPane.showInputDialog("Enter Section Name");
+			Section section=new Section(sectionNumber, sectionId, sectionName);
+			sectionService.createSection(section);
+			
+		case 2: sectionService.showSection();
+
+		default:
+			break;
+		}
+		
+	}while(true);*/
+}
+}
