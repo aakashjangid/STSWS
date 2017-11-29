@@ -1,0 +1,24 @@
+package com.yash.fileiodemo.util;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class TrainerAllMenu {
+	
+	public static void trainerAllMenu() throws IOException {
+		
+		File file = new File("Section Management.txt");
+		file.createNewFile();
+		FileWriter fileWriter = new FileWriter(file);
+		fileWriter.write(" 1. Section Management \n 2. Category Management \n 3. Document Management \n 4. Trainee Management \n 5. Batch Creation");
+		fileWriter.close();
+		FileReader fileReader = new FileReader(file);
+		char[] cbuf = new char[10000];
+		fileReader.read(cbuf);
+		System.out.println(cbuf);
+		fileReader.close();
+	}
+	
+}
