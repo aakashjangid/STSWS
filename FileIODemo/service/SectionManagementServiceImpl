@@ -1,16 +1,40 @@
 package com.yash.fileiodemo.service;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JOptionPane;
+
 import com.yash.fileiodemo.controller.SectionManagementService;
 import com.yash.fileiodemo.model.Section;
 
 public class SectionManagementServiceImpl implements SectionManagementService{
 	
-	ArrayList<Section> sectionRepository = new ArrayList<>();
+	Set<Section> sectionRepository;
+	File fos;
 	
+	public SectionManagementServiceImpl() {
+		sectionRepository = new HashSet<Section>();
+		fos = new File("Section Repostiory.txt");
+		try {
+			fos.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+		
 	@Override
-	public void createSection(Section section) {
-		sectionRepository.add(section);
+	public void createSection(Section section) throws IOException {
+		boolean repeat =sectionRepository.add(section);
+		if(repeat == false ) {JOptionPane.showMessageDialog(null, "The Section Already Exists !!!");} 
+		else { 	JOptionPane.showMessageDialog(null, "Success ! Section Created");}	
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fos));
+		oos.writeObject(sectionRepository);
+		oos.close();
 	}
 
 	@Override
@@ -20,4 +44,19 @@ public class SectionManagementServiceImpl implements SectionManagementService{
 		}
 	}
 
+	@Override
+	public void editSection(int sectionNumber, String sectionName) {
+		for (Section section : sectionRepository) {
+			if(section.getSectionNumber()==sectionNumber) {
+				section.setSectionName(sectionName);
+				JOptionPane.showMessageDialog(null, "Section Name Updated Successfully !!");
+		}
+	}
+	}
+
+	@Override
+	public void deleteSection(int sectionNumber) {
+		// TODO Auto-generated method stub
+		
+	}
 }
