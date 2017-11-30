@@ -1,17 +1,16 @@
 package com.yash.fileiodemo.model;
 
-public class Section {
+import java.io.Serializable;
+
+public class Section implements Serializable{
 	private int sectionNumber;
-	private String sectionId;
 	private String sectionName;
 	
 	public Section() {
-		
 	}
 	
-	public Section(int sectionNumber, String sectionId2, String sectionName) {
+	public Section(int sectionNumber, String sectionName) {
 		this.sectionNumber=sectionNumber;
-		this.sectionId=sectionId2;
 		this.sectionName=sectionName;
 	}
 
@@ -20,12 +19,6 @@ public class Section {
 	}
 	public void setSectionNumber(int sectionNumber) {
 		this.sectionNumber = sectionNumber;
-	}
-	public String getSectionId() {
-		return sectionId;
-	}
-	public void setSectionId(String sectionId) {
-		this.sectionId = sectionId;
 	}
 	public String getSectionName() {
 		return sectionName;
@@ -36,6 +29,17 @@ public class Section {
 	
 	@Override
 	public String toString() {
-		return "Section No - "+this.getSectionNumber()+" Section Id - "+this.getSectionId()+" Section Name - "+this.getSectionName();
+		return "Section No - "+this.getSectionNumber()+" Section Name - "+this.getSectionName();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Section mySection = (Section) obj;
+		return this.getSectionNumber()==(mySection.getSectionNumber());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.getSectionNumber();
 	}
 }
