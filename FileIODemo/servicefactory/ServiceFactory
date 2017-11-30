@@ -1,0 +1,9 @@
+package com.yash.fileiodemo.servicefactory;
+
+import com.yash.fileiodemo.service.SectionManagementServiceImpl;
+
+public class ServiceFactory {
+	public static SectionManagementServiceImpl getEmployeeService() {
+		return new SectionManagementServiceImpl();
+	}
+}
