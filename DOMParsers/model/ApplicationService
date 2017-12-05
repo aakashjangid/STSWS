@@ -1,0 +1,8 @@
+package com.yash.service;
+
+public class ApplicationService {
+
+	public void showDetails() {
+	System.out.println("In Application Service");	
+	}
+}
