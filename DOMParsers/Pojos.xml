@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pojos>
+<pojo id="application" class="com.yash.model.Application"></pojo>
+<pojo id="applicationService" class="com.yash.service.ApplicationService"></pojo>
+<pojo id="applicationController" class="com.yash.controller.ApplicationController"></pojo>
+</pojos>
