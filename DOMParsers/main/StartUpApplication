@@ -1,0 +1,25 @@
+package com.yash.main;
+
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+import com.yash.controller.ApplicationController;
+import com.yash.loadxml.LoadXmlFile;
+import com.yash.model.Application;
+import com.yash.pojofactory.PojoFactory;
+import com.yash.service.ApplicationService;
+
+public class StartUpApplication {
+
+	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	
+		PojoFactory pf = new LoadXmlFile().getInstance();
+		
+		Application app = (Application) pf.getPojo(Application.class);
+		app.showDetails();
+		ApplicationService app1= (ApplicationService) pf.getPojo(ApplicationService.class);
+		app1.showDetails();
+		ApplicationController ac= (ApplicationController) pf.getPojo(ApplicationController.class);
+		ac.showDetails();
+	}
+}
