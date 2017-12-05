@@ -1,0 +1,8 @@
+package com.yash.controller;
+
+public class ApplicationController {
+
+	public void showDetails() {
+		System.out.println("wow");
+	}
+}
