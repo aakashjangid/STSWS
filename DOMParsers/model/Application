@@ -1,0 +1,8 @@
+package com.yash.model;
+
+public class Application {
+
+	public void showDetails() {
+		System.out.println("Hurray !");
+	}	
+}
