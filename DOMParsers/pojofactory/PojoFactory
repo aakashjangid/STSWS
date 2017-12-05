@@ -1,0 +1,25 @@
+package com.yash.pojofactory;
+
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
+
+public class PojoFactory {
+
+	Object[] pojos;
+
+	public PojoFactory(Object[] pojos) {
+		this.pojos = pojos;
+	}
+  
+	public Object getPojo(Class classtemp) throws ParserConfigurationException, SAXException, IOException,
+			ClassNotFoundException, InstantiationException, IllegalAccessException {
+
+		for (Object object : pojos) {
+			if (object.getClass() == classtemp) {
+				return object;
+			}
+		}
+		return null;
+	}
+}
