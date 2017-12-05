@@ -1,0 +1,73 @@
+package com.yash.loadxml;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.yash.pojofactory.PojoFactory;
+
+/**
+ * This is the class which will parse the XML File and will give the object of the POJO Factory.
+ * 
+ * @author aakash.jangid
+ *
+ */
+public class LoadXmlFile {
+	/**
+	 * This is the object array which will store the objects from the XML file.
+	 */
+	Object[] pojos;
+	
+	/**
+	 * This method will return the object of the POJO Factory.
+	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	public PojoFactory getInstance() throws ParserConfigurationException, SAXException, IOException,
+			ClassNotFoundException, InstantiationException, IllegalAccessException {
+
+		File file = new File("Pojos.xml");
+
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = documentBuilderFactory.newDocumentBuilder();
+		Document document = dBuilder.parse(file);
+
+		document.getDocumentElement().normalize();
+
+		System.out.println("Root element :" + document.getDocumentElement().getNodeName());
+		NodeList nList = document.getElementsByTagName("pojo");
+		pojos = new Object[nList.getLength()];
+		System.out.println("----------------------------");
+
+		for (int temp = 0; temp < nList.getLength(); temp++) {
+
+			Node nNode = nList.item(temp);
+
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element eElement = (Element) nNode;
+
+				String classname = eElement.getAttribute("class");
+				Class c = Class.forName(classname);
+				Object obj = c.newInstance();
+				pojos[temp] = obj;
+			}
+		}
+
+		PojoFactory pf = new PojoFactory(pojos);
+		return pf;
+	}
+}
