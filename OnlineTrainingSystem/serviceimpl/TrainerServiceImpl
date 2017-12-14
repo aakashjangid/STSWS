@@ -1,0 +1,186 @@
+package com.yash.onlinetrainingsystem.serviceimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import com.yash.onlinetrainingsystem.service.TrainerService;
+
+public class TrainerServicesImpl implements TrainerService {
+	private Connection connection;
+
+	public TrainerServicesImpl(Connection con) {
+		this.connection=con;
+	}
+
+	public void addCourse() {
+		String name = JOptionPane.showInputDialog("Enter Course Name");
+		int duration = Integer.parseInt(JOptionPane.showInputDialog("Enter Course Duration (days)"));
+		String severity = "low";
+		String[] options = { "low", "medium", "high" };
+		int choice = JOptionPane.showOptionDialog(null, "SEVERITY", "PLEASE SELECT YOUR OPTION",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+		switch (choice) {
+		case 0:
+			severity = "low";
+			break;
+		case 1:
+			severity = "medium";
+			break;
+		case 2:
+			severity = "high";
+			break;
+		default:
+			break;
+		}
+		try {
+			String sql = "insert into courses(name,duration,severity,createdby) values(?,?,?,?)";
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setInt(2, duration);
+			pstmt.setString(3, severity);
+			pstmt.setString(4, RoleIdentifier.name);
+			pstmt.execute();
+			JOptionPane.showMessageDialog(null, "Course Added Successfully !");
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	}
+	
+	public void listCourses() {
+		try {
+			String sql = "select * from courses where createdby=?";
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, RoleIdentifier.name);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String name = rs.getString("name");
+				int duration = rs.getInt("duration");
+				String severity = rs.getString("severity");
+				System.out.println(name + " -- " + duration + " -- " + severity);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.getMessage();
+		}
+	}
+	
+	public void deleteCourses() {
+		String[] options = { "Delete Course by Id", "Delete Course by Name" };
+		int choice = JOptionPane.showOptionDialog(null, "UPDATE USER", "PLEASE SELECT YOUR OPTION",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+		switch (choice) {
+		case 0:
+			int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Course Id"));
+			deleteCourseById(id);
+			break;
+
+		case 1:
+			String name = JOptionPane.showInputDialog("Enter Course Name");
+			DeleteCourseByName(name);
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	private void DeleteCourseByName(String name) {
+		try {
+			String sql = "delete from courses where name=?";
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.execute();
+			pstmt.close();
+			JOptionPane.showMessageDialog(null, "Course Deleted Successfully !");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void deleteCourseById(int id) {
+		try {
+			String sql = "delete from courses where id=?";
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			pstmt.execute();
+			pstmt.close();
+			JOptionPane.showMessageDialog(null, "Course Deleted Successfully !");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateCourses() {
+		String[] options = { "Find Course by Id", "Find Course by Name" };
+		int choice = JOptionPane.showOptionDialog(null, "UPDATE COURSE", "PLEASE SELECT YOUR OPTION",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+		switch (choice) {
+		case 0:
+			int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Course Id"));
+			updateCourseById(id);
+			break;
+
+		case 1:
+			String name = JOptionPane.showInputDialog("Enter Course Name");
+			updateCourseByName(name);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	private void updateCourseById(int id) {
+		try {
+			String sql = "update courses set name=? where id=?";
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setInt(2, id);
+			stmt.setString(1, JOptionPane.showInputDialog("Enter New Name"));
+			stmt.execute();
+			stmt.close();
+			JOptionPane.showMessageDialog(null, "Course Name Updated Successfully !!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateCourseByName(String name) {
+		try {
+			String sql = "update courses set name=? where name=?";
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setString(2, name);
+			stmt.setString(1, JOptionPane.showInputDialog("Enter New Name"));
+			stmt.execute();
+			stmt.close();
+			JOptionPane.showMessageDialog(null, "Course Name Updated Successfully !!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void showTrainees() {
+		try {
+			String sql = "select * from allusers where role=?";
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, "trainee");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String name = rs.getString("name");
+				String phone = rs.getString("phone");
+				String email = rs.getString("email");
+				System.out.println(name + " -- " + phone + " -- " + email);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.getMessage();
+		}
+	}
+}
