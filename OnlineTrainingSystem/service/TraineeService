@@ -1,0 +1,5 @@
+package com.yash.onlinetrainingsystem.service;
+
+public interface TraineeService {
+	public void getCourses();
+}
