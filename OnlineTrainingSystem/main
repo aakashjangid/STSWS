@@ -1,0 +1,21 @@
+package com.yash.onlinetrainingsystem.main;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import com.yash.onlinetrainingsystem.serviceimpl.Login;
+import com.yash.onlinetrainingsystem.util.DBConnection;
+
+public class StartUpApplication {
+
+	public static void main(String[] args) {
+
+		Connection connection = new DBConnection().getConnection();
+		new Login().login(connection);
+
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.getMessage();
+		}
+	}
+}
