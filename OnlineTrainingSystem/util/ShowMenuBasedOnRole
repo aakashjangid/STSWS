@@ -1,0 +1,30 @@
+package com.yash.onlinetrainingsystem.util;
+
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import com.yash.onlinetrainingsystem.serviceimpl.AdminMenu;
+import com.yash.onlinetrainingsystem.serviceimpl.TraineeMenu;
+import com.yash.onlinetrainingsystem.serviceimpl.TrainerMenu;
+
+public class ShowMenuBasedOnRole {
+
+	public void showMenu(String role, Connection con) {
+
+		if (role == null) {
+			JOptionPane.showMessageDialog(null, "No User Found !");
+		} else {
+			if (role.equals("admin")) {
+				AdminMenu menu = new AdminMenu(con);
+				menu.getMenu();
+			}
+			if (role.equals("trainer")) {
+				TrainerMenu menu = new TrainerMenu(con);
+				menu.getMenu();
+			}
+			if (role.equals("trainee")) {
+				TraineeMenu menu = new TraineeMenu(con);
+				menu.getMenu();
+			}
+		}
+	}
+}
