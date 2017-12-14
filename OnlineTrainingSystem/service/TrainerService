@@ -1,0 +1,9 @@
+package com.yash.onlinetrainingsystem.service;
+
+public interface TrainerService {
+	public void addCourse();
+	public void listCourses();
+	public void deleteCourses();
+	public void updateCourses();
+	public void showTrainees();
+}
