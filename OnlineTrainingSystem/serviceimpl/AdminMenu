@@ -1,0 +1,48 @@
+package com.yash.onlinetrainingsystem.serviceimpl;
+
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+
+public class AdminMenu {
+	private Connection connection;
+	
+	public AdminMenu(Connection con) {
+		this.connection=con;
+	}
+	
+	public void getMenu() {
+		AdminServicesImpl servicesImpl = new AdminServicesImpl(connection);
+		boolean cont = true;
+
+		do {
+			String[] options = { "List All Users", "List All Courses", "Update User", "Logout" };
+			int choice = JOptionPane.showOptionDialog(null, "ADMIN MENU",
+					"WELCOME " + RoleIdentifier.name.toUpperCase(), JOptionPane.DEFAULT_OPTION,
+					JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+			switch (choice) {
+			case 0:
+				servicesImpl.listUser();
+				break;
+
+			case 1:
+				servicesImpl.listCourses();
+				break;
+
+			case 2:
+				servicesImpl.updateUser();
+				break;
+
+			case 3:
+				JOptionPane.showMessageDialog(null,
+						"Successfully Logged Out ! Thank You for using Online Training System");
+				cont = false;
+				break;
+
+			default:
+				break;
+			}
+		} while (cont);
+	}
+
+}
