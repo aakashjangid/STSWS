@@ -1,0 +1,53 @@
+package com.yash.onlinetrainingsystem.serviceimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+
+public class RoleIdentifier {
+
+	public Connection connection;
+	
+	public static String name;
+
+	public RoleIdentifier(Connection connection) {
+		this.connection = connection;
+	}
+
+	public String getRole() {
+		String role = null;
+		String userName = JOptionPane.showInputDialog("Login Name");
+		String passWord = null;
+		JPasswordField passwordField = new JPasswordField();
+		passwordField.setEchoChar('*');
+		int okCxl = JOptionPane.showConfirmDialog(null, passwordField, "Enter Password", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.OK_CANCEL_OPTION);
+
+		if (okCxl == JOptionPane.OK_OPTION)
+			passWord = new String(passwordField.getPassword());
+
+		try {
+			String sql = "select * from allusers where loginname=? and password=?";
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setString(1, userName);
+			stmt.setString(2, passWord);
+			stmt.execute();
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				System.out.println("Welcome " + userName);
+				role = rs.getString("role");
+				name=userName;
+				return role;
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.getMessage();
+		}
+
+		return role;
+	}
+}
