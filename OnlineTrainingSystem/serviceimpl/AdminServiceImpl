@@ -1,0 +1,130 @@
+package com.yash.onlinetrainingsystem.serviceimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.JOptionPane;
+
+import com.yash.onlinetrainingsystem.service.AdminService;
+
+public class AdminServicesImpl implements AdminService {
+	private Connection connection;
+
+	public AdminServicesImpl(Connection connection) {
+		this.connection = connection;
+	}
+	
+	public void listUser() {
+		Statement stmt;
+		try {
+			stmt = connection.createStatement();
+			String sql = "select * from allusers";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				String name = rs.getString("name");
+				long phone = rs.getLong("phone");
+				String email = rs.getString("email");
+				String role = rs.getString("role");
+				System.out.println(name + " -- " + phone + " -- " + email + " -- " + role);
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.getMessage();
+		}
+	}
+	
+	public void listCourses() {
+		try {
+			Statement stmt = connection.createStatement();
+			String sql = "select * from courses";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				String name = rs.getString("name");
+				int duration = rs.getInt("duration");
+				String severity = rs.getString("severity");
+				System.out.println(name + " -- " + duration + " -- " + severity);
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			e.getMessage();
+		}
+	}
+	
+	public void updateUser() {
+		String[] options = { "Find User by Id", "Find User by Name" };
+		int choice = JOptionPane.showOptionDialog(null, "UPDATE USER", "PLEASE SELECT YOUR OPTION",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+		switch (choice) {
+		case 0:
+			int id = Integer.parseInt(JOptionPane.showInputDialog("Enter User Id"));
+			updateUserById(id);
+			break;
+
+		case 1:
+			String name = JOptionPane.showInputDialog("Enter Name");
+			updateUserByName(name);
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	private void updateUserByName(String name) {
+		try {
+			String sql = "update allusers set role=? where name=?";
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setString(2, name);
+			String[] options = { "Trainer", "Trainee", "Admin" };
+			int choice = JOptionPane.showOptionDialog(null, "UPDATE USER", "PLEASE SELECT YOUR OPTION",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+			if (choice == 0) {
+				stmt.setString(1, "trainer");
+				JOptionPane.showMessageDialog(null, "User Updated Successfully !!");
+			}
+			if (choice == 1) {
+				stmt.setString(1, "trainee");
+				JOptionPane.showMessageDialog(null, "User Updated Successfully !!");
+			}
+			if (choice == 2) {
+				stmt.setString(1, "admin");
+				JOptionPane.showMessageDialog(null, "User Updated Successfully !!");
+			}
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateUserById(int id) {
+		try {
+			String sql = "update allusers set role=? where id=?";
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setInt(2, id);
+			String[] options = { "Trainer", "Trainee", "Admin" };
+			int choice = JOptionPane.showOptionDialog(null, "UPDATE USER", "PLEASE SELECT YOUR OPTION",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+			if (choice == 0) {
+				stmt.setString(1, "trainer");
+				JOptionPane.showMessageDialog(null, "User Updated Successfully !!");
+			}
+			if (choice == 1) {
+				stmt.setString(1, "trainee");
+				JOptionPane.showMessageDialog(null, "User Updated Successfully !!");
+			}
+			if (choice == 2) {
+				stmt.setString(1, "admin");
+				JOptionPane.showMessageDialog(null, "User Updated Successfully !!");
+			}
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+}
