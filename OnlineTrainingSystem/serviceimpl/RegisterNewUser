@@ -1,0 +1,40 @@
+package com.yash.onlinetrainingsystem.serviceimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+public class RegisterNewUsers {
+	public Connection connection;
+
+	public RegisterNewUsers(Connection connection) {
+		this.connection = connection;
+	}
+
+	public boolean registerUser() {
+		String name = JOptionPane.showInputDialog("Enter Name");
+		int phone = Integer.parseInt(JOptionPane.showInputDialog("Enter Contact Number"));
+		String email = JOptionPane.showInputDialog("Enter email");
+		String loginname = JOptionPane.showInputDialog("Enter Login Name");
+		String password = JOptionPane.showInputDialog("Enter Password");
+
+		String sql = "insert into allusers(name,phone,email,loginname,password) values(?,?,?,?,?)";
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setInt(2, phone);
+			pstmt.setString(3, email);
+			pstmt.setString(4, loginname);
+			pstmt.setString(5, password);
+			pstmt.execute();
+			JOptionPane.showMessageDialog(null, "User Registered Successfully !");
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return false;
+	}
+}
