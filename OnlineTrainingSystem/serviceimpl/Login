@@ -1,0 +1,39 @@
+package com.yash.onlinetrainingsystem.serviceimpl;
+
+import java.sql.Connection;
+
+import javax.swing.JOptionPane;
+
+import com.yash.onlinetrainingsystem.util.ShowMenuBasedOnRole;
+
+public class Login {
+
+	public void login(Connection connection) {
+		do {
+			String[] options = { "Login", "Register", "Close" };
+			int choice = JOptionPane.showOptionDialog(null, "ONLINE TRAINING SYSTEM", "WELCOME",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+			switch (choice) {
+			case 0:
+				RoleIdentifier identifier = new RoleIdentifier(connection);
+				ShowMenuBasedOnRole menuBasedOnRole = new ShowMenuBasedOnRole();
+				String role = identifier.getRole();
+				menuBasedOnRole.showMenu(role, connection);
+				break;
+
+			case 1:
+				RegisterNewUsers reNewUsers = new RegisterNewUsers(connection);
+				reNewUsers.registerUser();
+				break;
+
+			case 2:
+				System.exit(0);
+
+			default:
+				break;
+			}
+
+		} while (true);
+	}
+}
