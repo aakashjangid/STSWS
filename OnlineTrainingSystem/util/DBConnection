@@ -1,0 +1,29 @@
+package com.yash.onlinetrainingsystem.util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.log4j.Logger;
+
+public class DBConnection {
+	
+	private Connection DBConnection;
+	private static Logger logger = Logger.getLogger(DBConnection.class);
+	
+	public Connection getConnection() {
+	String driverClassName = "com.mysql.jdbc.Driver";
+	String url = "jdbc:mysql://localhost/onlinetrainingsystem";
+	String user = "root";
+	String pwd = "root";
+
+		try {
+			Class c = Class.forName(driverClassName);
+			DBConnection = DriverManager.getConnection(url, user, pwd);
+			logger.info("class : - " + c);
+		} catch (ClassNotFoundException | SQLException e) {
+			logger.error("Error : " + e.getMessage());
+		}
+		return DBConnection;
+	}
+}
