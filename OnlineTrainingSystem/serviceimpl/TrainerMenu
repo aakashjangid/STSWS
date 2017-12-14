@@ -1,0 +1,103 @@
+package com.yash.onlinetrainingsystem.serviceimpl;
+
+import java.sql.Connection;
+
+import javax.swing.JOptionPane;
+
+import com.yash.onlinetrainingsystem.service.TrainerService;
+
+public class TrainerMenu {
+	TrainerService services;
+
+	public TrainerMenu(Connection connection) {
+		services = new TrainerServicesImpl(connection);
+	}
+
+	public void getMenu() {
+		boolean cont = true;
+		do {
+			String[] options = { "Courses", "Trainees", "Logout" };
+			int choice = JOptionPane.showOptionDialog(null, "TRAINER MENU",
+					"WELCOME " + RoleIdentifier.name.toUpperCase(), JOptionPane.DEFAULT_OPTION,
+					JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+			switch (choice) {
+			case 0:
+				courseMenu();
+				break;
+
+			case 1:
+				traineeMenu();
+				break;
+
+			case 2:
+				JOptionPane.showMessageDialog(null,
+						"Successfully Logged Out ! Thank You for using Online Training System");
+				cont = false;
+				break;
+
+			default:
+				break;
+			}
+		} while (cont);
+
+	}
+
+	private void courseMenu() {
+		boolean cont = true;
+		do {
+			String[] options = { "Add Course", "Show Added Courses", "Remove Course", "Update Course", "Go Back" };
+			int choice = JOptionPane.showOptionDialog(null, "TRAINER MENU",
+					"WELCOME " + RoleIdentifier.name.toUpperCase(), JOptionPane.DEFAULT_OPTION,
+					JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+			switch (choice) {
+			case 0:
+				services.addCourse();
+				break;
+
+			case 1:
+				services.listCourses();
+				break;
+
+			case 2:
+				services.deleteCourses();
+				break;
+
+			case 3:
+				services.updateCourses();
+				break;
+
+			case 4:
+				cont = false;
+				break;
+
+			default:
+				break;
+			}
+		} while (cont);
+	}
+
+	private void traineeMenu() {
+		boolean cont = true;
+		do {
+			String[] options = { "Show All Trainees", "Go Back" };
+			int choice = JOptionPane.showOptionDialog(null, "TRAINER MENU",
+					"WELCOME " + RoleIdentifier.name.toUpperCase(), JOptionPane.DEFAULT_OPTION,
+					JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+			switch (choice) {
+			case 0:
+				services.showTrainees();
+				break;
+
+			case 1:
+				cont = false;
+				break;
+
+			default:
+				break;
+			}
+		} while (cont);
+	}
+}
