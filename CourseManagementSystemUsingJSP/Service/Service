@@ -1,0 +1,14 @@
+package com.yash.cmsass.service;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import com.yash.cmsass.model.Course;
+import com.yash.cmsass.model.User;
+
+public interface Service {
+	
+	public boolean addCourse(Course course);
+	public boolean checkUser(User user);
+	public LinkedHashMap<String, ArrayList<String>> getCourseAndMainTitle();
+}
