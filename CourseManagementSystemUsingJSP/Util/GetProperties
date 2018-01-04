@@ -1,0 +1,63 @@
+package com.yash.cmsass.util;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
+
+public class GetProperties {
+	Properties prop = new Properties();
+	File file = new File("config.properties");
+
+	public GetProperties() {
+		OutputStream output = null;
+		if (!file.exists()) {
+			try {
+				output = new FileOutputStream(file);
+				prop.setProperty("url", "jdbc:mysql://localhost/cms");
+				prop.setProperty("user", "root");
+				prop.setProperty("password", "root");
+
+				prop.store(output, null);
+			} catch (IOException io) {
+				io.printStackTrace();
+			} finally {
+				if (output != null) {
+					try {
+						output.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	public String[] getConfig() {
+		String[] configs = new String[3];
+		InputStream input = null;
+		try {
+			input = new FileInputStream(file);
+			prop.load(input);
+
+			configs[0] = prop.getProperty("url");
+			configs[1] = prop.getProperty("user");
+			configs[2] = prop.getProperty("password");
+			
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return configs;
+	}
+}
