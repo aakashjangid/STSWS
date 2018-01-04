@@ -1,0 +1,102 @@
+package com.yash.cmsass.daoimpl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.yash.cmsass.dao.Dao;
+import com.yash.cmsass.model.Course;
+import com.yash.cmsass.model.User;
+import com.yash.cmsass.util.DBUtil;
+import com.yash.cmsass.util.GetProperties;
+
+public class DaoImpl implements Dao {
+	private Connection connection;
+
+	public DaoImpl() {
+		String driverClassName = "com.mysql.jdbc.Driver";
+		GetProperties getProperties = new GetProperties();
+		String[] config = getProperties.getConfig();
+		DBUtil dBUtil = new DBUtil(driverClassName);
+		connection = dBUtil.getConnection(config[0], config[1], config[2]);
+	}
+
+	public boolean addCourse(Course course) {
+		System.out.println("inside dao");
+
+		String sql = "insert into subtitles(course,maintitle,subtitle,path,description,status) values(?,?,?,?,?,?)";
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, course.getCourseName());
+			pstmt.setString(2, course.getMainTitle());
+			pstmt.setString(3, course.getSubTitle());
+			pstmt.setString(4, "abcd");
+			pstmt.setString(5, course.getDescription());
+			pstmt.setInt(6, course.getStatus());
+			int confirm = pstmt.executeUpdate();
+			if (confirm == 1) {
+				pstmt.close();
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean checkUser(User user) {
+		String sql = "select * from users where loginname=? and password=?";
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, user.getLoginName());
+			pstmt.setString(2, user.getPassword());
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String name = rs.getString("name");
+				System.out.println(name);
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public ArrayList<String> getCourses() {
+		ArrayList<String> courses = new ArrayList<String>();
+		String sql = "SELECT * FROM courses";
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(sql);
+			while (rs.next()) {
+				String name = rs.getString("title");
+				if (name != null)
+					courses.add(name);
+			}
+			rs.close();
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return courses;
+	}
+
+	public ArrayList<String> getMaintitles(String course) {
+		ArrayList<String> maintitle = new ArrayList<String>();
+		String sql = "SELECT maintitle FROM subtitles WHERE course='" + course + "' GROUP BY maintitle";
+		try {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				maintitle.add(rs.getString("maintitle"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return maintitle;
+	}
+}
