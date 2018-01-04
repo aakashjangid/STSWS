@@ -1,0 +1,46 @@
+package com.yash.cmsass.util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+/**
+ * This is the DBUtil class which will load the driver class. 
+ * Also it will return the Connection Object. 
+ * @author aakash.jangid
+ *
+ */
+public class DBUtil {
+	
+	/**
+	 * This is the Connection reference
+	 */
+	private Connection connection;
+	
+	/**
+	 * This is the constructor of the DbUtil class
+	 * When the constructor will be called it will load the driver class,
+	 * Also it will set the Connection Object to connection reference.
+	 * @param driverClassName
+	 */
+	public DBUtil(String driverClassName) {
+			try {
+				Class c = Class.forName(driverClassName);
+				System.out.println("Driver Loaded Successfully !");
+			} catch (Exception e) {
+			System.out.println("Driver Not Loaded ?");
+			}
+	}
+	
+	/**
+	 * @return This method will return the connection object whenever this method is called
+	 */
+	public Connection getConnection(String url, String user, String password) {
+		try {
+			connection = DriverManager.getConnection(url,user,password);
+			return connection;
+		} catch (SQLException e) {
+			System.out.println("Unable to Connect to the database !");
+		}
+		return null;
+	}
+}
