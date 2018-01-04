@@ -1,0 +1,36 @@
+package com.yash.cmsass.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.yash.cmsass.model.User;
+import com.yash.cmsass.service.Service;
+import com.yash.cmsass.serviceimpl.ServiceImpl;
+
+public class Login extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		
+		String loginName = request.getParameter("loginname");
+		String password = request.getParameter("password");
+		
+		User user = new User(loginName,password);
+		Service service = new ServiceImpl();
+		boolean confirm = service.checkUser(user);
+		
+		if(confirm) {
+			response.sendRedirect("FirstPageWelcome.jsp");
+		}else {
+			out.println("Please Enter Correct Credentials");
+			response.sendRedirect("home.jsp");
+		}
+	}
+}
