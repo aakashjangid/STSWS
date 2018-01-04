@@ -1,0 +1,45 @@
+package com.yash.cmsass.serviceimpl;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import com.yash.cmsass.dao.Dao;
+import com.yash.cmsass.daoimpl.DaoImpl;
+import com.yash.cmsass.model.Course;
+import com.yash.cmsass.model.User;
+import com.yash.cmsass.service.Service;
+
+public class ServiceImpl implements Service {
+
+	private Dao dao = new DaoImpl();
+
+	public boolean addCourse(Course course) {
+		System.out.println("inside service");
+		boolean confirm = dao.addCourse(course);
+		return confirm;
+	}
+
+	public boolean checkUser(User user) {
+		boolean confirm = dao.checkUser(user);
+		return confirm;
+	}
+
+	public ArrayList<String> getAllMaintitle(String course) {
+		ArrayList<String> maintitle = dao.getMaintitles(course);
+		return maintitle;
+	}
+
+	public ArrayList<String> getCourses() {
+		ArrayList<String> courses = dao.getCourses();
+		return courses;
+	}
+
+	public LinkedHashMap<String, ArrayList<String>> getCourseAndMainTitle() {
+		LinkedHashMap<String, ArrayList<String>> courseAndTitle = new LinkedHashMap<String, ArrayList<String>>();
+		ArrayList<String> courses = getCourses();
+		for (String courseName : courses) {
+			courseAndTitle.put(courseName, getAllMaintitle(courseName));
+		}
+		return courseAndTitle;
+	}
+}
