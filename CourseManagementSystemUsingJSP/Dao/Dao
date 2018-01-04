@@ -1,0 +1,14 @@
+package com.yash.cmsass.dao;
+
+import java.util.ArrayList;
+
+import com.yash.cmsass.model.Course;
+import com.yash.cmsass.model.User;
+
+public interface Dao {
+	
+	public boolean addCourse(Course course);
+	public boolean checkUser(User user);
+	public ArrayList<String> getCourses();
+	public ArrayList<String> getMaintitles(String course);
+}
