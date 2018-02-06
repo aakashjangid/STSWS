@@ -1,0 +1,50 @@
+package com.yash.cmsass.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
+import com.yash.cmsass.model.Contact;
+import com.yash.cmsass.service.ContactService;
+import com.yash.cmsass.serviceimpl.ContactServiceImpl;
+
+/**
+ * Servlet implementation class SearchContactController
+ */
+@WebServlet("/SearchContactController")
+public class SearchContactController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private ContactService contactService;
+	private static Logger logger = Logger.getLogger(SearchContactController.class);
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public SearchContactController() {
+        super();
+        contactService=new ContactServiceImpl();
+        logger.info("SearchContactController Object Created");
+    }
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String freeText = request.getParameter("freetext");
+		System.out.println(request.getParameter("freetext"));
+		List<Contact> contacts = contactService.searchContactsByFreeText(freeText,(Integer)request.getSession().getAttribute("userid"));
+		request.setAttribute("contactlist", contacts);
+		for (Contact contact : contacts) {
+			System.out.println(contact.getName());
+			System.out.println(contact.getContact());
+		}
+		getServletContext().getRequestDispatcher("/listcontacts.jsp?success=csearch").forward(request, response);
+	}
+}
