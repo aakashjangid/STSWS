@@ -1,0 +1,55 @@
+package com.yash.cmsass.controller;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
+import com.yash.cmsass.model.User;
+import com.yash.cmsass.service.UserService;
+import com.yash.cmsass.serviceimpl.UserServiceImpl;
+
+/**
+ * Servlet implementation class UserLoginController
+ */
+@WebServlet("/UserRegisterController")
+public class UserRegisterController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	UserService service;
+	
+	private static Logger logger = Logger.getLogger(UserRegisterController.class);
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public UserRegisterController() {
+		super();
+		service = new UserServiceImpl();
+		logger.info("UserRegisterController : - Object Created");
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html");
+
+		User user = new User();
+		user.setName(request.getParameter("name"));
+		user.setContact(request.getParameter("contact"));
+		user.setLoginname(request.getParameter("loginname"));
+		user.setPassword(request.getParameter("password"));
+		user.setRole(1);
+		user.setStatus(1);
+		boolean confirm = service.insert(user);
+
+		if (confirm) {
+			response.sendRedirect("./home.jsp?msg=User Registration Successfully");
+		}
+	}
+}
