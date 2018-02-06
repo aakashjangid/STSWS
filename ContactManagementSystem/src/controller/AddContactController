@@ -1,0 +1,49 @@
+package com.yash.cmsass.controller;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
+import com.yash.cmsass.model.Contact;
+import com.yash.cmsass.model.User;
+import com.yash.cmsass.service.ContactService;
+import com.yash.cmsass.serviceimpl.ContactServiceImpl;
+
+/**
+ * Servlet implementation class AddContactController
+ */
+@WebServlet("/AddContactController")
+public class AddContactController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(AddContactController.class);
+	private ContactService contactService;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public AddContactController() {
+        super();
+        contactService=new ContactServiceImpl();
+        logger.info("AddContactController Object Created ");
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Contact contact=new Contact();
+		contact.setUser((User)request.getSession().getAttribute("user"));
+		contact.setName(request.getParameter("name"));
+		contact.setContact(request.getParameter("contact"));
+		contact.setEmail(request.getParameter("email"));
+		contact.setAddress(request.getParameter("address"));
+		contactService.insert(contact);
+		
+		getServletContext().getRequestDispatcher("/ContactListController?success=cadd").forward(request, response);
+	}
+}
