@@ -1,0 +1,72 @@
+package com.yash.cmsass.serviceimpl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
+
+import com.yash.cmsass.dao.ContactDAO;
+import com.yash.cmsass.daoimpl.HibernateContactDAOimpl;
+import com.yash.cmsass.model.Contact;
+import com.yash.cmsass.service.ContactService;
+import com.yash.hibernate.util.HibernateUtil;
+
+public class ContactServiceImpl implements ContactService {
+	
+	private ContactDAO hibContactDAO;
+	private static Logger logger = Logger.getLogger(ContactServiceImpl.class);
+
+	public ContactServiceImpl() {
+		hibContactDAO = new HibernateContactDAOimpl();
+		logger.info("ContactService : - Object Created");
+	}
+
+	@Override
+	public void insert(Contact contact) {
+		hibContactDAO.insert(contact);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Contact> listAllContactsOfUser(Integer userid) {
+		
+		List<Contact> contacts = new ArrayList<>();
+		Session session = HibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery("From Contact where userid=:userid");
+		query.setInteger("userid", userid);
+		contacts=query.list();
+		
+		return contacts;
+	}
+
+	@Override
+	public void deleteUserById(Integer id) {
+		hibContactDAO.deleteContactById(id);
+	}
+
+	@Override
+	public void deleteMultipleContacts(List<Integer> idsToBeDeleted) {
+		hibContactDAO.deletMultipleContacts(idsToBeDeleted);
+		
+	}
+
+	@Override
+	public Contact getContact(Integer id) {
+		Contact contact = hibContactDAO.getContact(id);
+		return contact;
+	}
+
+	@Override
+	public void update(Contact contact) {
+		hibContactDAO.update(contact);
+	}
+
+	@Override
+	public List<Contact> searchContactsByFreeText(String freeText, Integer userid) {
+		List<Contact> contacts = hibContactDAO.findContactsByFreeText(freeText,userid);
+		return contacts;
+	}
+}
