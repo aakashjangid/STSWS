@@ -1,0 +1,28 @@
+package com.yash.cmsass.service;
+
+import com.yash.cmsass.model.User;
+/**
+ * This will provided services related to the User.
+ * @author aakash.jangid
+ *
+ */
+public interface UserService {
+	/**
+	 * This method will map a user into the user information in the DB.
+	 * @param user object
+	 * @return this will return true if user is successfully inserted.
+	 */
+	public boolean insert(User user);
+	/**
+	 * This method will authenticate the user with the help of the loginname and password
+	 * which is being passed in the User Object.
+	 * @param user object.
+	 * @return true if the user is authenticated.
+	 */
+	public User authenticateUser(String loginname, String password);
+	
+	
+	public boolean updateUserInfo(User user, String password);
+	
+	public boolean updateUserPassword(User user, String old, String newPass, String rePass);
+}
