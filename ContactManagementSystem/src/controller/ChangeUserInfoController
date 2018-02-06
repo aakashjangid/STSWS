@@ -1,0 +1,73 @@
+package com.yash.cmsass.controller;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+
+import com.yash.cmsass.model.User;
+import com.yash.cmsass.service.UserService;
+import com.yash.cmsass.serviceimpl.UserServiceImpl;
+
+/**
+ * Servlet implementation class EditContactController
+ */
+@WebServlet("/ChangeUserInfoController")
+public class ChangeUserInfoController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private UserService userService;
+	private static Logger logger = Logger.getLogger(ChangeUserInfoController.class);
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ChangeUserInfoController() {
+		super();
+		userService = new UserServiceImpl();
+		logger.info("ChangeUserInfoController Object Created");
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		User user = (User) request.getSession().getAttribute("user");
+		request.setAttribute("user", user);
+		getServletContext().getRequestDispatcher("/changeUserInfo.jsp").forward(request, response);
+	}
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		User user = (User) req.getSession().getAttribute("user");
+		Integer id = Integer.parseInt(req.getParameter("id"));
+		user.setId(id);
+		user.setName(req.getParameter("name"));
+		user.setContact(req.getParameter("contact"));
+		user.setEmail(req.getParameter("email"));
+		user.setAddress(req.getParameter("address"));
+		String password = req.getParameter("password");
+		
+		System.out.println("here ----------->>"+password);
+		
+		boolean check = userService.updateUserInfo(user, password);
+
+		if (check) {
+			HttpSession session = req.getSession();
+			session.setAttribute("username", user.getName());
+			session.setAttribute("user", user);
+			session.setAttribute("userid", user.getId());
+
+			resp.sendRedirect("./FirstPageWelcome.jsp?msg=User Info Updated Successfully");
+		} else {
+			resp.sendRedirect("./changeUserInfo.jsp?err=Password entered is incorrect");
+		}
+	}
+}
