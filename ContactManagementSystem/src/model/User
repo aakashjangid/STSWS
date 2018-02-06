@@ -1,0 +1,70 @@
+package com.yash.cmsass.model;
+
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+
+/**
+ * This class will be used as a model class to carry the data of user in it.
+ * We can call this class whenever we want to set or get the data of any User.
+ * @author aakash.jangid
+ *
+ */
+@Entity
+public class User extends Person{
+	/**
+	 * This is the status of the user.
+	 */
+	private Integer status;
+	/**
+	 * This is the role of the user.
+	 */
+	private Integer role;
+	/**
+	 * This is the Login Name of the user by which a user can log in the application.
+	 */
+	private String loginname;
+	/**
+	 * This is the password of the user by which a user can log in the application.
+	 */
+	private String password;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
+	private List<Contact> contacts;
+	
+	public List<Contact> getContacts() {
+		return contacts;
+	}
+	public void setContacts(List<Contact> contacts) {
+		this.contacts = contacts;
+	}
+	
+	
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public Integer getRole() {
+		return role;
+	}
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+	public String getLoginname() {
+		return loginname;
+	}
+	public void setLoginname(String loginName) {
+		this.loginname = loginName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+}
