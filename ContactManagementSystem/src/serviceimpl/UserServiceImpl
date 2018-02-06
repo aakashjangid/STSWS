@@ -1,0 +1,108 @@
+package com.yash.cmsass.serviceimpl;
+
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+
+import com.yash.cmsass.dao.UserDAO;
+import com.yash.cmsass.daoimpl.HibernateUserDAOImpl;
+import com.yash.cmsass.model.User;
+import com.yash.cmsass.service.UserService;
+import com.yash.hibernate.util.HibernateUtil;
+/**
+ * This is the implementation of the UserService Interface.
+ * It has the definition of all the methods described inside the UserService Interface.
+ * @author aakash.jangid
+ *
+ */
+public class UserServiceImpl implements UserService {
+	/**
+	 * This is the reference of the UserDAO Interface.
+	 */	
+	private UserDAO userDAOHib;
+	
+	private static Logger logger = Logger.getLogger(UserServiceImpl.class);
+
+	public UserServiceImpl() {
+		userDAOHib=new HibernateUserDAOImpl();
+		logger.info("UserService : - Object Created");
+	}
+	/**
+	 * This method will map a user into the user information in the DB.
+	 * @param user object
+	 * @return this will return true if user is successfully inserted.
+	 */
+	public boolean insert(User user) {
+		boolean confirm = userDAOHib.insert(user);
+		return confirm;
+	}
+	/**
+	 * This method will authenticate the user with the help of the loginname and password
+	 * which is being passed in the User Object.
+	 * @param user object.
+	 * @return true if the user is authenticated.
+	 */
+	public User authenticateUser(String loginname, String password) {
+		
+		User user = null;
+		Session session = HibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery("From User where loginname=:loginname AND password=:password");
+		query.setString("loginname", loginname);
+		query.setString("password", password);
+		user = (User) query.uniqueResult();
+		return user;
+	}
+	@Override
+	public boolean updateUserInfo(User user, String password) {
+		
+		Session session = HibernateUtil.openSession();
+		session.beginTransaction();
+		Query query1 = session.createQuery("FROM User WHERE id=:id AND password=:password");
+		query1.setInteger("id", user.getId());
+		query1.setString("password", password);
+		User user1 = (User) query1.uniqueResult();
+		session.getTransaction().commit();
+		
+		if(user1!=null) {
+		session.beginTransaction();
+		SQLQuery query = session.createSQLQuery("UPDATE user SET name=?, contact=?, email=?, address=? where id=?");
+		query.setString(0, user.getName());
+		query.setString(1, user.getContact());
+		query.setString(2, user.getEmail());
+		query.setString(3, user.getAddress());
+		query.setInteger(4, user.getId());
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		return true;
+		}else {
+			return false;
+		}
+	}
+	@Override
+	public boolean updateUserPassword(User user, String old, String newPass, String rePass) {
+		
+		Session session = HibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery("From User where id=:id AND password=:password");
+		query.setInteger("id", user.getId());
+		query.setString("password", old);
+		user = (User) query.uniqueResult();
+		
+		if(user!=null && newPass.equals(rePass)) {
+			SQLQuery squery = session.createSQLQuery("UPDATE user SET password=? where id=?");
+			squery.setString(0, newPass);
+			squery.setInteger(1, user.getId());
+			squery.executeUpdate();
+			session.getTransaction().commit();
+			session.close();
+			return true;
+		}else {
+			session.getTransaction().commit();
+			session.close();
+			return false;	
+		}
+	}
+}
