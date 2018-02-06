@@ -1,0 +1,22 @@
+package com.yash.cmsass.service;
+
+import java.util.List;
+
+import com.yash.cmsass.model.Contact;
+
+public interface ContactService {
+	
+	public void insert(Contact contact);
+
+	public List<Contact> listAllContactsOfUser(Integer attribute);
+
+	public void deleteUserById(Integer id);
+
+	public void deleteMultipleContacts(List<Integer> idsToBeDeleted);
+
+	public Contact getContact(Integer id);
+
+	public void update(Contact contact);
+
+	public List<Contact> searchContactsByFreeText(String freeText, Integer integer);	
+}
