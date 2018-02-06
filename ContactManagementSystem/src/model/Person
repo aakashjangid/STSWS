@@ -1,0 +1,66 @@
+package com.yash.cmsass.model;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+/**
+ * This is the class which has the common attributes available in both User Object and Contact Object.
+ * @author aakash.jangid
+ *
+ */
+
+@MappedSuperclass
+public class Person {
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer id;
+	/**
+	 * This is the name of the person.
+	 */
+	private String name;
+	/**
+	 * This is the contact number of the person.
+	 */
+	private String contact;
+	/**
+	 * This is the email of the person.
+	 */
+	private String email;
+	/**
+	 * This is the address of the person.
+	 */
+	private String address;
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getContact() {
+		return contact;
+	}
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+}
