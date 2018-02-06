@@ -1,0 +1,21 @@
+package com.yash.cmsass.dao;
+
+import java.util.List;
+
+import com.yash.cmsass.model.Contact;
+
+public interface ContactDAO {
+	
+	public void insert(Contact contact);
+
+	public void deleteContactById(Integer id);
+
+	public void deletMultipleContacts(List<Integer> idsToBeDeleted);
+
+	public Contact getContact(Integer id);
+
+	public void update(Contact contact);
+
+	public List<Contact> findContactsByFreeText(String freeText, Integer userid);
+	
+}
