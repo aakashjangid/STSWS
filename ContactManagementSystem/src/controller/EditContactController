@@ -1,0 +1,58 @@
+package com.yash.cmsass.controller;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
+import com.yash.cmsass.model.Contact;
+import com.yash.cmsass.model.User;
+import com.yash.cmsass.service.ContactService;
+import com.yash.cmsass.serviceimpl.ContactServiceImpl;
+
+/**
+ * Servlet implementation class EditContactController
+ */
+@WebServlet("/EditContactController")
+public class EditContactController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private ContactService contactService;
+	private static Logger logger = Logger.getLogger(EditContactController.class);
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public EditContactController() {
+        super();
+        contactService=new ContactServiceImpl();
+        logger.info("EditContactController Object Created");
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Integer id = Integer.parseInt(request.getParameter("id"));
+		Contact contact = contactService.getContact(id);
+		request.setAttribute("contact", contact);
+		getServletContext().getRequestDispatcher("/editContact.jsp").forward(request, response);
+	}
+	
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Contact contact=new Contact();
+		Integer id = Integer.parseInt(req.getParameter("id"));
+		contact.setId(id);
+		contact.setName(req.getParameter("name"));
+		contact.setContact(req.getParameter("contact"));
+		contact.setEmail(req.getParameter("email"));
+		contact.setAddress(req.getParameter("address"));
+		contact.setUser((User)req.getSession().getAttribute("user"));
+		contactService.update(contact);
+		
+		getServletContext().getRequestDispatcher("/ContactListController?success=cupdate").forward(req, resp);	
+	}
+}
