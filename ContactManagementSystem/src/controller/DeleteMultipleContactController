@@ -1,0 +1,48 @@
+package com.yash.cmsass.controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
+import com.yash.cmsass.service.ContactService;
+import com.yash.cmsass.serviceimpl.ContactServiceImpl;
+
+/**
+ * Servlet implementation class DeleteContactController
+ */
+@WebServlet("/DeleteMultipleContactController")
+public class DeleteMultipleContactController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private ContactService contactService;
+	private static Logger logger = Logger.getLogger(DeleteMultipleContactController.class);
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public DeleteMultipleContactController() {
+		super();
+		contactService = new ContactServiceImpl();
+		logger.info("DeleteMultipleContactController Object Created");
+	}
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String idsForRecordsToDelete[] = req.getParameterValues("checkboxarr");
+		List<Integer> idsToBeDeleted = new ArrayList<>();
+		if(idsForRecordsToDelete!=null) {
+		for (String id : idsForRecordsToDelete) {
+			idsToBeDeleted.add(Integer.parseInt(id));
+		}
+		contactService.deleteMultipleContacts(idsToBeDeleted);
+		getServletContext().getRequestDispatcher("/ContactListController?success=cdelete").forward(req, resp);
+		}else {
+			getServletContext().getRequestDispatcher("/ContactListController").forward(req, resp);
+		}
+	}
+}
