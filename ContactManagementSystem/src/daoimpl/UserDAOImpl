@@ -1,0 +1,26 @@
+package com.yash.cmsass.daoimpl;
+
+import org.hibernate.Session;
+
+import com.yash.cmsass.dao.UserDAO;
+import com.yash.cmsass.model.User;
+import com.yash.hibernate.util.HibernateUtil;
+
+public class HibernateUserDAOImpl implements UserDAO {
+
+	Session session;
+
+	public HibernateUserDAOImpl() {
+		session = HibernateUtil.openSession();
+	}
+
+	@Override
+	public boolean insert(User user) {
+		session.beginTransaction();
+		session.saveOrUpdate(user);
+		session.getTransaction().commit();
+		session.close();
+		return true;
+	}
+
+}
