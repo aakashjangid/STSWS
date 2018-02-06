@@ -1,0 +1,28 @@
+package com.yash.cmsass.model;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+/**
+ * This class will be used as a model class to carry the data of contacts in it.
+ * We can call this class whenever we want to set or get the data of any contact.
+ * @author aakash.jangid
+ *
+ */
+@Entity
+public class Contact extends Person{
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="userid", nullable=false)
+	private User user;
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+}
