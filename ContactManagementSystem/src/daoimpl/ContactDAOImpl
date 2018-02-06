@@ -1,0 +1,95 @@
+package com.yash.cmsass.daoimpl;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
+
+import com.yash.cmsass.dao.ContactDAO;
+import com.yash.cmsass.model.Contact;
+import com.yash.hibernate.util.HibernateUtil;
+
+public class HibernateContactDAOimpl implements ContactDAO {
+
+	public HibernateContactDAOimpl() {
+		
+		logger.info("ContactDAO : - Object Created");
+	}
+
+	private static Logger logger = Logger.getLogger(HibernateContactDAOimpl.class);
+
+	@Override
+	public void insert(Contact contact) {
+		Session session = HibernateUtil.openSession();
+		session.beginTransaction();
+		session.saveOrUpdate(contact);
+		session.getTransaction().commit();
+		session.close();
+	}
+
+	@Override
+	public void deleteContactById(Integer id) {
+		Session session = HibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery("Delete From Contact WHERE id=:id");
+		query.setInteger("id", id);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+	}
+
+	@Override
+	public void deletMultipleContacts(List<Integer> idsToBeDeleted) {
+		for (Integer id : idsToBeDeleted) {
+			deleteContactById(id);
+		}
+	}
+
+	@Override
+	public Contact getContact(Integer id) {
+		
+		Contact contact = null;
+		Session session = HibernateUtil.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery("From Contact where id=:id");
+		query.setInteger("id", id);
+		contact = (Contact) query.uniqueResult();
+		session.getTransaction().commit();
+		session.close();
+
+		return contact;
+	}
+
+	@Override
+	public void update(Contact contact) {
+		Session session = HibernateUtil.openSession();
+		session.beginTransaction();
+		Contact newContact = new Contact();
+		newContact.setId(contact.getId());
+		newContact.setName(contact.getName());
+		newContact.setAddress(contact.getAddress());
+		newContact.setContact(contact.getContact());
+		newContact.setEmail(contact.getEmail());
+		newContact.setUser(contact.getUser());
+		session.update(newContact);
+		session.getTransaction().commit();
+		session.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Contact> findContactsByFreeText(String freeText, Integer userid) {
+		Session session = HibernateUtil.openSession();
+		session.beginTransaction();
+	
+		Query query = session.createQuery("From Contact WHERE userid=:userid AND name like :freetext");
+		query.setInteger("userid", userid);
+		query.setString("freetext", "%"+freeText+"%");
+		List<Contact> contacts = query.list();
+		
+		session.getTransaction().commit();
+		session.close();
+		return contacts;
+	}
+}
