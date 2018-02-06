@@ -1,0 +1,17 @@
+package com.yash.cmsass.dao;
+
+import com.yash.cmsass.model.User;
+/**
+ * This is the interface which have all the CRUD Operation which will be performed on the users.
+ * It will be used to manipulate or obtain any information of user.
+ * @author aakash.jangid
+ *
+ */
+public interface UserDAO {
+	/**
+	 * This method will map a user into the user information in the DB.
+	 * @param user object
+	 * @return this will return true if user is successfully inserted.
+	 */
+	public boolean insert(User user);
+}
