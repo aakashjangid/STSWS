@@ -1,0 +1,60 @@
+package com.yash.cmsass.controller;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+
+import com.yash.cmsass.model.User;
+import com.yash.cmsass.service.UserService;
+import com.yash.cmsass.serviceimpl.UserServiceImpl;
+
+/**
+ * Servlet implementation class UserLoginController
+ */
+@WebServlet("/UserLoginController")
+public class UserLoginController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	UserService service;
+	private static Logger logger = Logger.getLogger(UserLoginController.class);
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public UserLoginController() {
+		super();
+		service = new UserServiceImpl();
+		logger.info("UserLoginController Object Created");
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		User user=null;
+		
+		String loginname=request.getParameter("loginname");
+		String password=request.getParameter("password");
+		user = service.authenticateUser(loginname,password);
+
+		if (user!=null) {
+			HttpSession session = request.getSession(true);
+			session.setAttribute("username", user.getName());
+			session.setAttribute("user", user);
+			session.setAttribute("userid", user.getId());
+			System.out.println("Logged in - " + session.getAttribute("username"));
+			response.sendRedirect("./FirstPageWelcome.jsp");
+			
+		} else {
+			response.sendRedirect("home.jsp?err=Please Enter Correct Credentials");
+		}
+	}
+}
