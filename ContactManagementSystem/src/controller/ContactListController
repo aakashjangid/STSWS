@@ -1,0 +1,50 @@
+package com.yash.cmsass.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
+import com.yash.cmsass.model.Contact;
+import com.yash.cmsass.service.ContactService;
+import com.yash.cmsass.serviceimpl.ContactServiceImpl;
+
+/**
+ * Servlet implementation class ContactListController
+ */
+@WebServlet("/ContactListController")
+public class ContactListController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    private ContactService contactService;   
+    private static Logger logger = Logger.getLogger(ContactListController.class);
+	
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ContactListController() {
+        super();
+        contactService=new ContactServiceImpl();
+        logger.info("ContactListController Object Created");
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<Contact> contacts=contactService.listAllContactsOfUser((Integer)request.getSession().getAttribute("userid"));
+		request.setAttribute("contactlist", contacts);
+		getServletContext().getRequestDispatcher("/listcontacts.jsp").forward(request, response);
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<Contact> contacts=contactService.listAllContactsOfUser((Integer)request.getSession().getAttribute("userid"));
+		request.setAttribute("contactlist", contacts);
+		getServletContext().getRequestDispatcher("/listcontacts.jsp").forward(request, response);
+	}
+}
