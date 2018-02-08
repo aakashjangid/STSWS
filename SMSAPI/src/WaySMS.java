@@ -12,8 +12,8 @@ public class WaySms {
 
  public static void main(String[] args) {
   
-  login("8871966618", "9753952725");
-  sendSMS("8871966618", "chalo");
+  login("userid", "password");
+  sendSMS("receiverNo", "msg");
   
   System.out.println("Message has been sent successfully!");
  }
