@@ -1,1 +1,1 @@
-This is the test sms api.
+This is the Way2SMS sms api.
