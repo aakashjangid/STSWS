@@ -1,2 +1,3 @@
 # STSWS
-This are the core java projects which are being developed while learning java !!
+
+@Copyright - 2017-2018 www.wastedpotential.com
